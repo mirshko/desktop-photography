@@ -68,6 +68,7 @@ export default function Home() {
     <div className="container">
       <Head>
         <title>desktop.photography</title>
+        <meta name="description" content="Screenshots: Desktop Photography" />
       </Head>
 
       <main>
