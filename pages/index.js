@@ -1,34 +1,52 @@
+import classNames from "classnames";
+import { AnimatePresence, motion } from "framer-motion";
 import Head from "next/head";
+import { useRef, useState } from "react";
 
-const Intro = () => (
-  <section className="window-wrapper">
-    <div className="window">
-      <header className="title-bar">
-        <div className="title-bar-text">Desktop Photography</div>
-        <div className="title-bar-controls">
-          <button aria-label="Close"></button>
+function useClose() {
+  const [isOpen, setIsOpen] = useState(true);
+
+  const toggle = () => setIsOpen(!isOpen);
+
+  return [isOpen, toggle];
+}
+
+const Intro = ({ dragConstraints }) => {
+  const [isOpen, toggle] = useClose();
+
+  return (
+    <DraggableWindow
+      className="intro"
+      isOpen={isOpen}
+      dragConstraints={dragConstraints}
+    >
+      <div className="window">
+        <header className="title-bar">
+          <div className="title-bar-text">Desktop Photography</div>
+          <div className="title-bar-controls">
+            <button onClick={toggle} aria-label="Close"></button>
+          </div>
+        </header>
+        <div className="window-body">
+          <blockquote>
+            <p>Screenshots: Desktop Photography</p>
+            <cite>
+              Bhoka [
+              <a
+                href="https://twitter.com/boop"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                @boop
+              </a>
+              ]
+            </cite>
+          </blockquote>
         </div>
-      </header>
-      <div className="window-body">
-        <blockquote>
-          <p>Screenshots: Desktop Photography</p>
-          <cite>
-            Bhoka [
-            <a
-              href="https://twitter.com/boop"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              @boop
-            </a>
-            ]
-          </cite>
-        </blockquote>
       </div>
-    </div>
-  </section>
-);
-
+    </DraggableWindow>
+  );
+};
 const AuthorLink = ({ author }) => (
   <a
     href={`https://twitter.com/${author}`}
@@ -47,37 +65,83 @@ const AuthorLink = ({ author }) => (
   </a>
 );
 
-const Screenshot = ({ title, author, url }) => (
-  <article className="window-wrapper">
-    <div className="window">
-      <header className="title-bar">
-        <div className="title-bar-text">{`${title} — ${author}`}</div>
-        <div className="title-bar-controls">
-          <AuthorLink author={author} />
+const DraggableWindow = ({
+  active,
+  children,
+  className,
+  dragConstraints,
+  isOpen,
+  onClick,
+  onDragStart,
+}) => {
+  const cachedClassNames = classNames(
+    "window-wrapper",
+    active ? "is-active" : "",
+    className
+  );
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          transition={{ duration: 0.05 }}
+          className={cachedClassNames}
+          drag
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          dragConstraints={dragConstraints}
+          dragElastic={0}
+          dragMomentum={false}
+          onClick={onClick}
+          onDragStart={onDragStart}
+        >
+          {children}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const Screenshot = ({ title, author, url, dragConstraints }) => {
+  const [isOpen, toggle] = useClose();
+
+  return (
+    <DraggableWindow isOpen={isOpen} dragConstraints={dragConstraints}>
+      <div className="window">
+        <header className="title-bar">
+          <div className="title-bar-text">{`${title} — ${author}`}</div>
+          <div className="title-bar-controls">
+            <AuthorLink author={author} />
+            <button onClick={toggle} aria-label="Close"></button>
+          </div>
+        </header>
+        <div className="window-body">
+          <img className="window-image" loading="lazy" src={url} alt={title} />
         </div>
-      </header>
-      <div className="window-body">
-        <img className="window-image" loading="lazy" src={url} alt={title} />
       </div>
-    </div>
-  </article>
-);
+    </DraggableWindow>
+  );
+};
 
 export default function Home() {
+  const dragConstraints = useRef(null);
+
   return (
-    <div className="container">
+    <div className="root">
       <Head>
         <title>desktop.photography</title>
         <meta name="description" content="Screenshots: Desktop Photography" />
       </Head>
 
-      <main>
-        <Intro />
+      <main className="content" ref={dragConstraints}>
+        <Intro dragConstraints={dragConstraints} />
 
         <Screenshot
           url="/Screen Shot 2020-05-04 at 10.34.27 AM.png"
           title="Screen Shot 2020-05-04 at 10.34.27 AM"
           author="@mirshko"
+          dragConstraints={dragConstraints}
         />
       </main>
 
@@ -98,10 +162,37 @@ export default function Home() {
             sans-serif;
         }
 
+        .root {
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+          min-height: -webkit-fill-available;
+        }
+
+        .content {
+          position: relative;
+          flex: 1;
+        }
+
+        .intro {
+          right: 0;
+          z-index: 999999999;
+          top: 0;
+        }
+
         .window-wrapper {
+          position: absolute;
+          user-select: none;
           max-width: 420px;
-          margin: 0 auto;
-          padding: 8px 8px 0 8px;
+          margin: 8px;
+        }
+
+        .window-wrapper.is-active {
+          z-index: 999999998;
+        }
+
+        .title-bar {
+          cursor: -webkit-grab;
         }
 
         .window-image {

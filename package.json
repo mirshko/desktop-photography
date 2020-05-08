@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "98.css": "^0.1.14",
+    "classnames": "^2.2.6",
+    "framer-motion": "^1.10.3",
     "next": "9.3.6",
     "react": "16.13.1",
     "react-dom": "16.13.1"
