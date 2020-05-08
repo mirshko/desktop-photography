@@ -96,6 +96,7 @@ export default function Home() {
         .window {
           max-width: 420px;
           margin: 8px auto 0 auto;
+          padding: 0 8px;
         }
 
         .window-image {
