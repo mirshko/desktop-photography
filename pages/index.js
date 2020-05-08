@@ -1,28 +1,30 @@
 import Head from "next/head";
 
 const Intro = () => (
-  <section className="window">
-    <header className="title-bar">
-      <div className="title-bar-text">Desktop Photography</div>
-      <div className="title-bar-controls">
-        <button aria-label="Close"></button>
+  <section className="window-wrapper">
+    <div className="window">
+      <header className="title-bar">
+        <div className="title-bar-text">Desktop Photography</div>
+        <div className="title-bar-controls">
+          <button aria-label="Close"></button>
+        </div>
+      </header>
+      <div className="window-body">
+        <blockquote>
+          <p>Screenshots: Desktop Photography</p>
+          <cite>
+            Bhoka [
+            <a
+              href="https://twitter.com/boop"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              @boop
+            </a>
+            ]
+          </cite>
+        </blockquote>
       </div>
-    </header>
-    <div className="window-body">
-      <blockquote>
-        <p>Screenshots: Desktop Photography</p>
-        <cite>
-          Bhoka [
-          <a
-            href="https://twitter.com/boop"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            @boop
-          </a>
-          ]
-        </cite>
-      </blockquote>
     </div>
   </section>
 );
@@ -46,17 +48,19 @@ const AuthorLink = ({ author }) => (
 );
 
 const Screenshot = ({ title, author, url }) => (
-  <section className="window">
-    <header className="title-bar">
-      <div className="title-bar-text">{`${title} — ${author}`}</div>
-      <div className="title-bar-controls">
-        <AuthorLink author={author} />
+  <article className="window-wrapper">
+    <div className="window">
+      <header className="title-bar">
+        <div className="title-bar-text">{`${title} — ${author}`}</div>
+        <div className="title-bar-controls">
+          <AuthorLink author={author} />
+        </div>
+      </header>
+      <div className="window-body">
+        <img className="window-image" loading="lazy" src={url} alt={title} />
       </div>
-    </header>
-    <div className="window-body">
-      <img className="window-image" loading="lazy" src={url} alt={title} />
     </div>
-  </section>
+  </article>
 );
 
 export default function Home() {
@@ -93,10 +97,10 @@ export default function Home() {
             sans-serif;
         }
 
-        .window {
+        .window-wrapper {
           max-width: 420px;
-          margin: 8px auto 0 auto;
-          padding: 0 8px;
+          margin: 0 auto;
+          padding: 8px 8px 0 8px;
         }
 
         .window-image {
