@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"98.css@^0.1.14":
+  version "0.1.14"
+  resolved "https://registry.yarnpkg.com/98.css/-/98.css-0.1.14.tgz#adcb94996b260933abee0d20a93615953acdefc2"
+  integrity sha512-r0ZdfhLaSh7WsRqxYd+p7WKJIKQmvUnGF/S5s3ULwmHaFnneLWT2szmR6C7n3h/sxege1f4ki+WP0ktwSeEICQ==
+
 "@ampproject/toolbox-core@^2.2.0", "@ampproject/toolbox-core@^2.3.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@ampproject/toolbox-core/-/toolbox-core-2.3.0.tgz#f27bd17e01fdc6725c440aefa844f63466c0f37e"
